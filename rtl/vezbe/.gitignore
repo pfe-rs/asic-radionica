@@ -1,0 +1,7 @@
+.settings/
+.project
+.library_mapping.xml
+*.vcd
+*.vvp
+*/obj_dir/
+*.drawio.bkp

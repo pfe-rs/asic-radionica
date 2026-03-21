@@ -1,0 +1,1 @@
+// Prekopirati resenje od 04_adder_N zadatka.
