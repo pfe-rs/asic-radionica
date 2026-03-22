@@ -1,12 +1,12 @@
-module adder_N # (
-  parameter int N = 8
-    ) (
-  input  [N-1:0] a_i,
-  input  [N-1:0] b_i,
-  input          c_i,
-  output [N-1:0] sum_o,
-  output         overflow_o
-  );
+// module full_adder (
+//   input  a_i,
+//   input  b_i,
+//   input  c_i,
+//   output sum_o,
+//   output c_o
+//   );
 
-  // Vaš kod ovde
-endmodule
+//   assign sum_o = a_i ^ b_i ^ c_i;
+//   assign c_o = (a_i && b_i) || (c_i && (a_i ^ b_i));
+//   // Vaš kod ovde
+// endmodule

@@ -5,6 +5,8 @@ module full_adder (
   output sum_o,
   output c_o
   );
-  
-  // Vaš kod ovde
+
+  assign sum_o = a_i ^ b_i ^ c_i;
+  assign c_o = (a_i && b_i) || (c_i && (a_i ^ b_i));
+
 endmodule

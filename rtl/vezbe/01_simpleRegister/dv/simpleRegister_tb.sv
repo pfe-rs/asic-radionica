@@ -19,10 +19,10 @@ module simpleRegister_tb ();
   logic [`N-1:0] test_data;
 
   simpleRegister #(.N (`N)) i_simpleRegister (
-    .clk_i(clk),
-    .rst_ni(rst_n),
-    .data_i(data_i),
-    .data_o(data_o)
+    .clk(clk),
+    .res(rst_n),
+    .in(data_i),
+    .out(data_o)
   );
 
   // toggle clock

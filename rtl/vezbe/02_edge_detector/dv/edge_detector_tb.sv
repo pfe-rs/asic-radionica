@@ -16,8 +16,8 @@ module edge_detector_tb ();
   logic both_edges_o;
 
   edge_detector i_edge_detector (
-    .clk_i(clk),
-    .rst_ni(rst_n),
+    .clk(clk),
+    .rst_n(rst_n),
     .data_i(data_i),
     .rising_edge_o(rising_edge_o),
     .falling_edge_o(falling_edge_o),

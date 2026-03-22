@@ -1,13 +1,25 @@
 `default_nettype none
 
-module simpleRegister 
+module simpleRegister
   # (
-  // Ovde se definisu parametri modula
+  parameter int N = 8
   )(
-  // Ovde se definisu ulazno-izlazne veze modula
+    input logic [N-1:0] in,
+    output logic [N-1:0] out,
+    input clk,
+    input res
   );
 
-  // Telo modula 
+  genvar i;
+
+  generate
+    for (i = 0; i < N; i++) begin : g_ime
+      always_ff @(posedge clk or negedge res) begin
+        if (~res) begin out[i] <= 0; end
+        else begin out[i] <= in[i]; end
+    end
+  end
+  endgenerate
 
 endmodule
 `default_nettype wire
