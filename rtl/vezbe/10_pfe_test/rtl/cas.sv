@@ -20,9 +20,9 @@ module cas # ( parameter int N = 8
 
     generate
         for (i = 0; i < N; i++) begin : g_i_for
-            assign E[i + 1] = E[i] && ~(A_i[i] ^ B_i[i]);
-            assign S_A[i + 1] = S_A[i] || (E[i] && A_i[i] && ~B_i[i]);
-            assign S_B[i + 1] = S_B[i] || (E[i] && ~A_i[i] && B_i[i]);
+            assign E[i + 1] = E[i] && ~(A_i[N - 1 - i] ^ B_i[N - 1 - i]);
+            assign S_A[i + 1] = S_A[i] || (E[i] && A_i[N - 1 - i] && ~B_i[N - 1 - i]);
+            assign S_B[i + 1] = S_B[i] || (E[i] && ~A_i[N - 1 - i] && B_i[N - 1 - i]);
         end
     endgenerate
 

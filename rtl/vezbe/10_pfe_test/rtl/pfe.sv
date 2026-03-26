@@ -52,7 +52,7 @@
             cas # (.N(DSIZE)) i_cas (
                 .A_i(ffs[i]),
                 .B_i(ffs[i+N/2]),
-                .S_i(1'b0),
+                .S_i(1'b1),
                 .S_A_o(buff_o[2*i]),
                 .S_B_o(buff_o[2*i+1])
             );
@@ -99,7 +99,7 @@
             for (int k = 0; k < N; k++) ffs[k] <= 0;
         end
         else begin
-            for (int k = 0; k < N; k++) ffs[k] <= info_i[k];
+            if (!out_valid_o) for (int k = 0; k < N; k++) ffs[k] <= info_i[k];
             if (state_flag)
                 ptr <= 0;
             else if (in_valid_i) begin
@@ -121,7 +121,7 @@
             CALC: begin
                 state = 1;
                 next_state = WRITE;
-                state_flag = (ptr === 0); // treba da bude jednako MEM'(MEM)
+                state_flag = (ptr === MEM'(MEM) - 1); // treba da bude jednako MEM'(MEM)
             end
 
             WRITE: begin
