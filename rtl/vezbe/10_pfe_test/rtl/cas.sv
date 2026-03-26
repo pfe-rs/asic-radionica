@@ -5,11 +5,7 @@ module cas # ( parameter int N = 8
     input logic S_i,
 
     output logic [N-1:0] S_A_o,
-    output logic [N-1:0] S_B_o,
-
-    output logic oo,
-    output logic oa,
-    output logic ob
+    output logic [N-1:0] S_B_o
 );
 
     logic E[N+1];
@@ -47,8 +43,5 @@ module cas # ( parameter int N = 8
 
     assign S_A_o = out;
     assign S_B_o = out_n;
-    assign oo = S;
-    assign oa = S_A[N];
-    assign ob = S_B[N];
 
 endmodule
