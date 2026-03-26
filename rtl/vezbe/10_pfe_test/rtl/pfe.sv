@@ -11,7 +11,32 @@
     // Output
     output logic [DSIZE-1:0] out_data_o,
     output logic             out_valid_o,
-    input  logic             out_ready_i
+    input  logic             out_ready_i,
+
+    output logic [DSIZE-1:0] buff_o_0,
+    output logic [DSIZE-1:0] buff_o_1,
+    output logic [DSIZE-1:0] buff_o_2,
+    output logic [DSIZE-1:0] buff_o_3,
+    output logic [DSIZE-1:0] buff_o_4,
+    output logic [DSIZE-1:0] buff_o_5,
+    output logic [DSIZE-1:0] buff_o_6,
+    output logic [DSIZE-1:0] buff_o_7,
+    output logic [DSIZE-1:0] reading_i_0,
+    output logic [DSIZE-1:0] reading_i_1,
+    output logic [DSIZE-1:0] reading_i_2,
+    output logic [DSIZE-1:0] reading_i_3,
+    output logic [DSIZE-1:0] reading_i_4,
+    output logic [DSIZE-1:0] reading_i_5,
+    output logic [DSIZE-1:0] reading_i_6,
+    output logic [DSIZE-1:0] reading_i_7,
+    output logic [DSIZE-1:0] ffs_0,
+    output logic [DSIZE-1:0] ffs_1,
+    output logic [DSIZE-1:0] ffs_2,
+    output logic [DSIZE-1:0] ffs_3,
+    output logic [DSIZE-1:0] ffs_4,
+    output logic [DSIZE-1:0] ffs_5,
+    output logic [DSIZE-1:0] ffs_6,
+    output logic [DSIZE-1:0] ffs_7
 );
     logic [DSIZE-1:0] reading_i[N];
     logic [DSIZE-1:0] buff_o[N];
@@ -73,11 +98,13 @@
             ptr <= 0;
             for (int k = 0; k < N; k++) ffs[k] <= 0;
         end
-        else if (state_flag)
-            ptr <= 0;
-        else if (in_valid_i) begin
-            ptr <= ptr + 1;
+        else begin
             for (int k = 0; k < N; k++) ffs[k] <= info_i[k];
+            if (state_flag)
+                ptr <= 0;
+            else if (in_valid_i) begin
+                ptr <= ptr + 1;
+            end
         end
     end
 
@@ -92,9 +119,9 @@
             end
 
             CALC: begin
-                state = 0;
+                state = 1;
                 next_state = WRITE;
-                state_flag = (ptr === MEM'(MEM));
+                state_flag = (ptr === 0); // treba da bude jednako MEM'(MEM)
             end
 
             WRITE: begin
@@ -113,5 +140,30 @@
             end
         endcase
     end
+
+    assign buff_o_0 = buff_o[0];
+    assign buff_o_1 = buff_o[1];
+    assign buff_o_2 = buff_o[2];
+    assign buff_o_3 = buff_o[3];
+    assign buff_o_4 = buff_o[4];
+    assign buff_o_5 = buff_o[5];
+    assign buff_o_6 = buff_o[6];
+    assign buff_o_7 = buff_o[7];
+    assign reading_i_0 = reading_i[0];
+    assign reading_i_1 = reading_i[1];
+    assign reading_i_2 = reading_i[2];
+    assign reading_i_3 = reading_i[3];
+    assign reading_i_4 = reading_i[4];
+    assign reading_i_5 = reading_i[5];
+    assign reading_i_6 = reading_i[6];
+    assign reading_i_7 = reading_i[7];
+    assign ffs_0 = ffs[0];
+    assign ffs_1 = ffs[1];
+    assign ffs_2 = ffs[2];
+    assign ffs_3 = ffs[3];
+    assign ffs_4 = ffs[4];
+    assign ffs_5 = ffs[5];
+    assign ffs_6 = ffs[6];
+    assign ffs_7 = ffs[7];
 
 endmodule
