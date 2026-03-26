@@ -16,16 +16,17 @@
     logic [DSIZE-1:0] reading_i[N];
     logic [DSIZE-1:0] buff_o[N];
     logic [DSIZE-1:0] info_i [N];
-    logic [DSIZE-1:0] buff_clk_o[N];
+    logic [DSIZE-1:0] ffs [N];
     logic state;
-    logic read_latch;
+
+    assign in_ready_o = out_ready_i;
 
     genvar i;
     generate
         for (i = 0; i < N / 2; i++) begin : g_for_cas
             cas # (.N(DSIZE)) i_cas (
-                .A_i(info_i[i]),
-                .B_i(info_i[i+N/2]),
+                .A_i(ffs[i]),
+                .B_i(ffs[i+N/2]),
                 .S_i(1'b0),
                 .S_A_o(buff_o[2*i]),
                 .S_B_o(buff_o[2*i+1])
@@ -38,7 +39,7 @@
         for (j = 0; j < N; j++) begin : g_for_mux
             mux # (.DSIZE(DSIZE)) i_mux (
                 .input_option1(reading_i[j]),
-                .input_option2(buff_clk_o[j]),
+                .input_option2(buff_o[j]),
                 .status(state),
                 .output_value(info_i[j])
             );
@@ -60,68 +61,44 @@
 
     // komponenta za promenu stanja
     always_ff @(posedge clk_i or negedge rst_ni) begin
-        if (!rst_ni) begin
+        if (!rst_ni)
             current_state <= READ;
-            for (int k = 0; k < N; k++) begin
-                buff_clk_o[k] <= 0;
-                reading_i[k] <= 0;
-            end
-        end
-        else begin
-            if (state_flag) begin
-                current_state <= next_state;
-                read_latch <= 0;
-            end
-        end
-        if (state) begin
-            for (int k = 0; k < N; k++) begin
-                buff_clk_o[k] <= buff_o[k];
-            end
-        end
+        else if (state_flag)
+            current_state <= next_state;
     end
 
     // komponenta za proveru prelaska u drugo stanje
     always_ff @(posedge clk_i or negedge rst_ni) begin
         if (!rst_ni) begin
             ptr <= 0;
-            read_latch <= 0;
+            for (int k = 0; k < N; k++) ffs[k] <= 0;
         end
         else if (state_flag)
             ptr <= 0;
-        else if (in_valid_i)
-            read_latch <= 1;
-        else if (in_ready_o && read_latch) begin
+        else if (in_valid_i) begin
             ptr <= ptr + 1;
-            reading_i[ptr] <= in_data_i;
+            for (int k = 0; k < N; k++) ffs[k] <= info_i[k];
         end
-        else if (~in_valid_i && ~out_valid_o)
-            ptr <= ptr +1;
-        else if (out_valid_o && out_ready_i)
-            out_data_o <= info_i[ptr];
-        else ptr <= ptr;
-
     end
 
     always_comb begin
         case (current_state)
             READ: begin
                 state = 0;
-                in_ready_o = 1;
                 out_valid_o = 0; //dodato
+                reading_i[ptr] = in_data_i;
                 next_state = CALC;
                 state_flag = (ptr === MEM'(N-1));
-
             end
 
             CALC: begin
-                state = 1;
+                state = 0;
                 next_state = WRITE;
-                in_ready_o = 0;
                 state_flag = (ptr === MEM'(MEM));
             end
 
             WRITE: begin
-                state = 0;
+                out_data_o = ffs[ptr];
                 out_valid_o = 1;
                 next_state = DONE;
                 state_flag = (ptr === MEM'(N-1));
@@ -137,6 +114,4 @@
         endcase
     end
 
-
 endmodule
-

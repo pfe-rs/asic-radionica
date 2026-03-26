@@ -12,21 +12,21 @@ module cas # ( parameter int N = 8
     logic S_A[N+1];
     logic S_B[N+1];
 
-    assign E[N] = 1;
-    assign S_A[N] = 0;
-    assign S_B[N] = 0;
+    assign E[0] = 1;
+    assign S_A[0] = 0;
+    assign S_B[0] = 0;
 
     genvar i;
 
     generate
-        for (i = N; i > 0; i--) begin : g_i_for
-            assign E[i - 1] = E[i] && ~(A_i[i-1] ^ B_i[i-1]);
-            assign S_A[i - 1] = S_A[i] || (E[i] && A_i[i-1] && ~B_i[i-1]);
-            assign S_B[i - 1] = S_B[i] || (E[i] && ~A_i[i-1] && B_i[i-1]);
+        for (i = 0; i < N; i++) begin : g_i_for
+            assign E[i + 1] = E[i] && ~(A_i[i] ^ B_i[i]);
+            assign S_A[i + 1] = S_A[i] || (E[i] && A_i[i] && ~B_i[i]);
+            assign S_B[i + 1] = S_B[i] || (E[i] && ~A_i[i] && B_i[i]);
         end
     endgenerate
 
-    logic t; assign t = ~S_A[0] && S_B[0];
+    logic t; assign t = ~S_A[N] && S_B[N];
     logic S; assign S = S_i ^ t;
 
     logic [N-1:0] out;

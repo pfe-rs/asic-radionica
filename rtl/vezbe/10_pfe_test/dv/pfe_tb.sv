@@ -17,7 +17,6 @@ module pfe_tb;
     logic [DSIZE-1:0] sent[N];
     logic [DSIZE-1:0] receved[N];
 
-
     pfe #(.DSIZE(DSIZE), .N(N)) dut (.*);
 
     // assign clk_i = 0;
@@ -54,7 +53,6 @@ module pfe_tb;
         end
 
         #10000;
- 
         $display("Done"); $finish;
     end
 
